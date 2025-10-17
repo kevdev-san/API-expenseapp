@@ -5,11 +5,11 @@ from datetime import date
 
 class Expenses(models.Model):
     CATEGORY_CHOICES = [
-        ('Food', 'Food'),
-        ('Transport', 'Transport'),
-        ('Entertainment', 'Entertainment'),
-        ('Health', 'Health'),
-        ('Other', 'Other'),
+        ('Comida', 'Comida'),
+        ('Transporte', 'Transporte'),
+        ('Entretenimiento', 'Entretenimiento'),
+        ('Salud', 'Salud'),
+        ('Otro', 'Otro'),
     ]
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='expenses') #relacion con el usuario
     title = models.CharField(max_length=100) #titulo de del gasto
