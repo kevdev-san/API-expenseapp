@@ -187,3 +187,39 @@ SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(hours=1),  # El token ahora dura 1 hora en lugar de los 5 minutos que trae por defecto django
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
 }
+
+
+# Configuración para producción
+import dj_database_url
+
+# Detectar si estamos en producción
+if 'RENDER' in os.environ:
+    DEBUG = False
+    
+    # Configurar ALLOWED_HOSTS
+    ALLOWED_HOSTS = [
+        '.onrender.com',  # Tu dominio de Render
+    ]
+    
+    # Base de datos desde variable de entorno
+    DATABASES = {
+        'default': dj_database_url.config(
+            default=os.environ.get('DATABASE_URL'),
+            conn_max_age=600,
+            conn_health_checks=True,
+        )
+    }
+    
+    # Seguridad
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_BROWSER_XSS_FILTER = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    
+    # WhiteNoise para archivos estáticos
+    MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# Configuración de archivos estáticos
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
