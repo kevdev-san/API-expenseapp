@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-(xr14ejee=ns$r84f9qc4x#rh^9trwb%tkbl2@#ekv%2v-fz$p
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -69,7 +69,8 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'Gastos.urls'
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
+    "http://localhost:3000", #para desarrollo
+    "https://front-expense-app.vercel.app" #dominio de produccion para que cors permita
 ]
 
 CORS_ALLOW_METHODS = [
@@ -113,13 +114,33 @@ WSGI_APPLICATION = 'Gastos.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+import os
+import sys
+
+# Forzar codificación UTF-8 agresivamente
+if sys.platform == 'win32':
+    import locale
+    os.environ['PYTHONIOENCODING'] = 'utf-8'
+    os.environ['PGCLIENTENCODING'] = 'UTF8'
+    os.environ['PGSYSCONFDIR'] = os.path.join(os.path.dirname(__file__), 'pg_config')
+    
+    # Crear directorio vacío para evitar que psycopg2 lea archivos del sistema
+    os.makedirs(os.environ['PGSYSCONFDIR'], exist_ok=True)
+
+# Configuración directa de la base de datos
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'gastosdb',
+        'USER': 'postgres',
+        'PASSWORD': 'kevin2006',
+        'HOST': '127.0.0.1',
+        'PORT': '5432',
+        'OPTIONS': {
+            'client_encoding': 'UTF8',
+        },
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators

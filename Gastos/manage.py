@@ -6,6 +6,11 @@ import sys
 
 def main():
     """Run administrative tasks."""
+    # Forzar codificación UTF-8 en Windows
+    if sys.platform == 'win32':
+        os.environ['PYTHONIOENCODING'] = 'utf-8'
+        os.environ['PGCLIENTENCODING'] = 'UTF8'
+    
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Gastos.settings')
     try:
         from django.core.management import execute_from_command_line
